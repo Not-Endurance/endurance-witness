@@ -1,6 +1,7 @@
 package com.example.uhf.fragment;
 
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,8 +12,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -24,21 +23,22 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.SimpleAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.uhf.R;
 import com.example.uhf.activity.UHFMainActivity;
 import com.example.uhf.tools.StringUtils;
 import com.example.uhf.tools.UIHelper;
-import com.lidroid.xutils.view.annotation.ViewInject;
-import com.rscja.deviceapi.RFIDWithUHF;
 import com.rscja.deviceapi.entity.UHFTAGInfo;
 import com.rscja.deviceapi.interfaces.IUHF;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 
 public class UHFReadTagFragment extends KeyDwonFragment {
@@ -227,9 +227,18 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                String result = msg.obj + "";
-                String[] strs = result.split("@");
-                addEPCToList(strs[0], strs[1]);
+
+                HttpTest test = new HttpTest();
+                AsyncTask<Object, Object, String> type = test.execute("");
+                String result = null;
+                try {
+                    result = type.get();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                addEPCToList(result, result);
                 mContext.playSound(1);
             }
         };
@@ -471,6 +480,34 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                     handler.sendMessage(msg);
                 }
             }
+        }
+    }
+
+    class HttpTest extends AsyncTask<Object, Object, String> {
+
+        @Override
+        protected String doInBackground(Object... params) {
+            String result;
+            String type;
+            try {
+                URL url = new URL("http://google.com");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                int status = con.getResponseCode();
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                StringBuffer content = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    content.append(inputLine);
+                }
+                in.close();
+                type = "success";
+                result = content.toString();
+            } catch (Exception ex) {
+                type = "error";
+                result = ex.getMessage();
+            }
+            return type;
         }
     }
 
