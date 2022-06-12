@@ -4,14 +4,13 @@ import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.view.KeyEvent;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.uhf.R;
 import com.example.uhf.adapter.ViewPagerAdapter;
-import com.example.uhf.fragment.KeyDwonFragment;
 import com.example.uhf.widget.NoScrollViewPager;
 import com.rscja.deviceapi.RFIDWithUHFUART;
 
@@ -20,16 +19,10 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 	protected ActionBar mActionBar;
 	protected NoScrollViewPager mViewPager;
 	protected ViewPagerAdapter mViewPagerAdapter;
-	protected List<KeyDwonFragment> lstFrg = new ArrayList<>();
+	protected List<Fragment> fragments = new ArrayList<>();
 	protected List<String> lstTitles = new ArrayList<>();
 
 	public RFIDWithUHFUART mReader;
-
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
 
 	public void initUHF() {
 		mActionBar = getActionBar();
@@ -51,67 +44,17 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 		}
 	}
 
-	protected void initViewPageData() {	}
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
 
 	protected void initViewPager() {
-		mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), lstFrg, lstTitles);
+		mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments, lstTitles);
 		mViewPager = findViewById(R.id.pager);
 		mViewPager.setAdapter(mViewPagerAdapter);
 		int offscreenPage = 2;
 		mViewPager.setOffscreenPageLimit(offscreenPage);
-	}
-
-	protected void initTabs() {
-		for (int i = 0; i < mViewPagerAdapter.getCount() - 3; ++i) {
-			mActionBar.addTab(mActionBar.newTab()
-					.setText(mViewPagerAdapter.getPageTitle(i)).setTabListener(mTabListener));
-		}
-	}
-
-	protected ActionBar.TabListener mTabListener = new ActionBar.TabListener() {
-
-		@Override
-		public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction) {
-			if (mActionBar.getTabCount() > 3 && tab.getPosition() != 3) {
-				mActionBar.removeTabAt(3);
-			}
-			if (tab.getPosition() == 3) {
-				int index = 0;
-				mViewPager.setCurrentItem(index, false);
-			} else {
-				mViewPager.setCurrentItem(tab.getPosition());
-			}
-		}
-
-		@Override
-		public void onTabUnselected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction) {
-
-		}
-
-		@Override
-		public void onTabReselected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction) {
-
-		}
-	};
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-		if (keyCode == 139 ||keyCode == 280 ||keyCode == 293) {
-
-			if (event.getRepeatCount() == 0) {
-
-				if (mViewPager != null) {
-
-					KeyDwonFragment sf = (KeyDwonFragment) mViewPagerAdapter.getItem(mViewPager.getCurrentItem());
-					sf.myOnKeyDwon();
-
-				}
-			}
-			return true;
-		}
-
-		return super.onKeyDown(keyCode, event);
 	}
 
 	public void toastMessage(String msg) {

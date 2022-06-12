@@ -3,6 +3,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +20,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class UHFReadTagFragment extends KeyDwonFragment {
+public class UHFReadTagFragment extends Fragment {
     private boolean loopFlag = false;
     Handler handler;
     Button BtInventory;
@@ -43,6 +45,8 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
+                long epoch = System.currentTimeMillis();
+                long scannedAtEpoch = epoch - (SystemClock.uptimeMillis() - msg.getWhen());
                 HttpTest test = new HttpTest();
             }
         };
@@ -69,16 +73,13 @@ public class UHFReadTagFragment extends KeyDwonFragment {
             } else {
                 mContext.mReader.stopInventory();
                 UIHelper.ToastMessage(mContext,
-                        R.string.uhf_msg_inventory_open_fail);
+                        R.string.scan_start_error);
             }
-        } else {// 停止识别
+        } else {
             stopInventory();
         }
     }
 
-    /**
-     * 停止识别
-     */
     private void stopInventory() {
         if (loopFlag) {
             loopFlag = false;
@@ -86,7 +87,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 BtInventory.setText(mContext.getString(R.string.btInventory));
             } else {
                 UIHelper.ToastMessage(mContext,
-                        R.string.uhf_msg_inventory_stop_fail);
+                        R.string.scan_stop_error);
             }
         }
     }
@@ -143,12 +144,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
             return type;
         }
     }
-
-    @Override
-    public void myOnKeyDwon() {
-        readTag();
-    }
-
 
     public class ToggleScanListener implements OnClickListener {
 

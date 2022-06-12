@@ -47,7 +47,6 @@ import android.view.ViewParent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -209,11 +208,6 @@ public class LazyViewPager extends ViewGroup {
         public void onPageScrollStateChanged(int state);
     }
 
-    /**
-     * Simple implementation of the {@link android.com.example.uhf.widget.LazyViewPager.OnPageChangeListener} interface with stub
-     * implementations of each method. Extend this if you do not intend to override
-     * every method of {@link android.com.example.uhf.widget.LazyViewPager.OnPageChangeListener}.
-     */
     public static class SimpleOnPageChangeListener implements OnPageChangeListener {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

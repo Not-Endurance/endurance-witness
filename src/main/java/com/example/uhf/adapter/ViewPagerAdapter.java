@@ -1,42 +1,33 @@
 package com.example.uhf.adapter;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-
-
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.uhf.fragment.KeyDwonFragment;
-
-/**
- * Created by Administrator on 2015-03-10.
- */
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    private List<KeyDwonFragment> lstFrg = new ArrayList<KeyDwonFragment>();
-    private List<String> lstTitles = new ArrayList<String>();
+    private List<Fragment> fragments = new ArrayList<>();
+    private List<String> lstTitles = new ArrayList<>();
 
-    public ViewPagerAdapter(FragmentManager fm, List<KeyDwonFragment> fragments, List<String> titles) {
+    public ViewPagerAdapter(FragmentManager fm, List<Fragment> fragments, List<String> titles) {
         super(fm);
-
-        lstFrg = fragments;
-        lstTitles = titles;
+        this.fragments = fragments;
+        this.lstTitles = titles;
     }
 
 
     @Override
     public Fragment getItem(int position) {
-        if (lstFrg.size() > 0) {
-            return lstFrg.get(position);
+        if (fragments.size() > 0) {
+            return this.fragments.get(position);
         }
         throw new IllegalStateException("No fragment at position " + position);
     }
 
     @Override
     public int getCount() {
-        return lstFrg.size();
+        return fragments.size();
     }
 
     @Override
