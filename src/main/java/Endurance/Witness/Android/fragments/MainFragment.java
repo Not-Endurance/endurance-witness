@@ -1,7 +1,6 @@
 package endurance.witness.android.fragments;
 
 import endurance.witness.android.activities.MainActivity;
-import endurance.witness.android.tools.HttpHandler;
 import endurance.witness.android.tools.JudgeClient;
 import endurance.witness.android.tools.UIHelper;
 import android.os.Bundle;
@@ -106,8 +105,8 @@ public class MainFragment extends Fragment {
     public class ConnectListener implements OnClickListener {
         @Override
         public void onClick(View v) {
-            String url = "https://google.com";
-            Handler handler = new HttpHandler(context, url);
+            Object role = witnessRoles.getSelectedItem();
+            Handler handler = new JudgeClient(context, role.toString());
             Message message = handler.obtainMessage();
             handler.dispatchMessage(message);
         }
