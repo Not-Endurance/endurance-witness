@@ -8,5 +8,6 @@
     <string name="toggleButton">Start</string>
     <string name="title_stop_Inventory">Stop</string>
     <string name="app_name">demo_uhf</string>
+    <string name="close">Close</string>
 
 </resources>

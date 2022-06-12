@@ -1,5 +1,6 @@
-package com.example.uhf.tools;
-import com.example.uhf.R;
+package endurance.witness.android.tools;
+
+import com.example.Android.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;

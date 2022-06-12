@@ -1,5 +1,7 @@
-package com.example.uhf.fragment;
+package endurance.witness.android.fragments;
 
+import endurance.witness.android.activities.MainActivity;
+import endurance.witness.android.tools.UIHelper;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,9 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import com.example.uhf.R;
-import com.example.uhf.activity.MainActivity;
-import com.example.uhf.tools.UIHelper;
+import com.example.Android.R;
 import com.rscja.deviceapi.entity.UHFTAGInfo;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

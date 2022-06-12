@@ -1,5 +1,6 @@
-package com.example.uhf.activity;
+package endurance.witness.android.fragments;
 
+import endurance.witness.android.adapters.ViewPagerAdapter;
 import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -10,9 +11,9 @@ import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
-import com.example.uhf.R;
-import com.example.uhf.adapter.ViewPagerAdapter;
-import com.example.uhf.widget.NoScrollViewPager;
+import com.example.Android.R;
+
+import endurance.witness.android.widgets.NoScrollViewPager;
 import com.rscja.deviceapi.RFIDWithUHFUART;
 
 public class FragmentBase extends FragmentActivity {

@@ -1,4 +1,4 @@
-package com.example.uhf.widget;
+package endurance.witness.android.widgets;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;

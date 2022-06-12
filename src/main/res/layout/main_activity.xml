@@ -5,10 +5,10 @@
     android:clipToPadding="false"
     android:fitsSystemWindows="true" >
 
-    <com.example.uhf.widget.NoScrollViewPager
+    <endurance.witness.android.widgets.NoScrollViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-    </com.example.uhf.widget.NoScrollViewPager>
+    </endurance.witness.android.widgets.NoScrollViewPager>
 
 </LinearLayout>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.uhf.widget;
+package endurance.witness.android.widgets;
 
 import android.content.Context;
 import android.database.DataSetObserver;

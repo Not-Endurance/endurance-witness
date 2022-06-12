@@ -1,8 +1,11 @@
-package com.example.uhf.activity;
+package endurance.witness.android.activities;
 
-import com.example.uhf.R;
-import com.example.uhf.fragment.MainFragment;
+import com.example.Android.R;
+
 import android.os.Bundle;
+
+import endurance.witness.android.fragments.FragmentBase;
+import endurance.witness.android.fragments.MainFragment;
 
 public class MainActivity extends FragmentBase {
 

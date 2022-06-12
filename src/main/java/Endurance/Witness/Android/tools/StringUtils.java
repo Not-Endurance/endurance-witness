@@ -1,4 +1,5 @@
-package com.example.uhf.tools;
+package endurance.witness.android.tools;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
