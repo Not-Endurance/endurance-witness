@@ -6,8 +6,8 @@ import android.os.Message;
 import android.os.SystemClock;
 
 public class HttpHandler extends Handler {
-    private String url;
-    private Context context;
+    protected String url;
+    protected Context context;
 
     public HttpHandler(Context context, String url) {
         this.url = url;

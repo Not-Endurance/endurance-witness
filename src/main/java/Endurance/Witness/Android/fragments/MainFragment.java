@@ -2,8 +2,8 @@ package endurance.witness.android.fragments;
 
 import endurance.witness.android.activities.MainActivity;
 import endurance.witness.android.tools.HttpHandler;
+import endurance.witness.android.tools.JudgeClient;
 import endurance.witness.android.tools.UIHelper;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,10 +16,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 import com.example.Android.R;
 import com.rscja.deviceapi.entity.UHFTAGInfo;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class MainFragment extends Fragment {
     private boolean isScanning = false;
@@ -48,7 +44,6 @@ public class MainFragment extends Fragment {
         this.witnessRoles = view.findViewById(R.id.witnessRoles);
 
         this.scanButton.setOnClickListener(new ToggleScanListener());
-        this.scanHandler = new HttpHandler(this.context, "https://google.com");
         this.connectButton.setOnClickListener(new ConnectListener());
     }
 
@@ -62,9 +57,10 @@ public class MainFragment extends Fragment {
 
     private void toggleScanning() {
         String startString = context.getString(R.string.toggleButton);
-        Object role = this.witnessRoles.getSelectedItem();
         if (this.scanButton.getText().equals(startString))
         {
+            Object role = this.witnessRoles.getSelectedItem();
+            this.scanHandler = new JudgeClient(this.context, role.toString());
             if (this.context.reader.startInventoryTag()) {
                 String stopText = this.context.getString(R.string.title_stop_Inventory);
                 this.scanButton.setText(stopText);
@@ -89,59 +85,14 @@ public class MainFragment extends Fragment {
 
     class Scanner extends Thread {
         public void run() {
-            String strTid;
-            String strResult;
             while (isScanning) {
                 UHFTAGInfo res = context.reader.readTagFromBuffer();
                 if (res != null) {
-                    strTid = res.getTid();
-                    String sixteen = "0000000000000000";
-                    String twentyFour = "000000000000000000000000";
-                    if (strTid.length() != 0
-                        && !strTid.equals(sixteen)
-                        && !strTid.equals(twentyFour)
-                    ) {
-                        strResult = "TID:" + strTid + "\n";
-                    } else {
-                        strResult = "EPC:" + res.getEPC() + "@" + res.getRssi();
-                    }
-
                     Message msg = scanHandler.obtainMessage();
-                    msg.obj = strResult;
+                    msg.obj = res.getEPC();
                     scanHandler.sendMessage(msg);
                 }
             }
-        }
-    }
-
-    class HttpTest extends AsyncTask<Object, Object, String> {
-
-        @Override
-        protected String doInBackground(Object... params) {
-            String result;
-            String type;
-            try {
-                // HTTP
-                URL url = new URL("http://google.com");
-                HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-                int status = con.getResponseCode();
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(con.getInputStream()));
-                String inputLine;
-                StringBuffer content = new StringBuffer();
-                while ((inputLine = in.readLine()) != null) {
-                    content.append(inputLine);
-                }
-                in.close();
-
-                type = "success";
-                result = content.toString();
-            } catch (Exception ex) {
-                type = "error";
-                result = ex.getMessage();
-            }
-            return type;
         }
     }
 
