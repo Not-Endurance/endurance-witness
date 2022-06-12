@@ -1,18 +1,19 @@
 package endurance.witness.android.fragments;
 
 import endurance.witness.android.activities.MainActivity;
+import endurance.witness.android.tools.HttpHandler;
 import endurance.witness.android.tools.UIHelper;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Spinner;
 import com.example.Android.R;
 import com.rscja.deviceapi.entity.UHFTAGInfo;
 import java.io.BufferedReader;
@@ -23,8 +24,10 @@ import java.net.URL;
 public class MainFragment extends Fragment {
     private boolean isScanning = false;
     private MainActivity context;
-    Handler handler;
-    Button toggleButton;
+    Button scanButton;
+    Handler scanHandler;
+    Button connectButton;
+    Spinner witnessRoles;
 
     @Override
     public View onCreateView(
@@ -39,17 +42,14 @@ public class MainFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         this.context = (MainActivity)getActivity();
-        this.toggleButton = getView().findViewById(R.id.ToggleButton);
-        this.toggleButton.setOnClickListener(new ToggleScanListener());
+        View view = getView();
+        this.connectButton= view.findViewById(R.id.connectButton);
+        this.scanButton = view.findViewById(R.id.scanButton);
+        this.witnessRoles = view.findViewById(R.id.witnessRoles);
 
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                long epoch = System.currentTimeMillis();
-                long scannedAtEpoch = epoch - (SystemClock.uptimeMillis() - msg.getWhen());
-                HttpTest test = new HttpTest();
-            }
-        };
+        this.scanButton.setOnClickListener(new ToggleScanListener());
+        this.scanHandler = new HttpHandler(this.context, "https://google.com");
+        this.connectButton.setOnClickListener(new ConnectListener());
     }
 
     @Override
@@ -62,11 +62,12 @@ public class MainFragment extends Fragment {
 
     private void toggleScanning() {
         String startString = context.getString(R.string.toggleButton);
-        if (this.toggleButton.getText().equals(startString))
+        Object role = this.witnessRoles.getSelectedItem();
+        if (this.scanButton.getText().equals(startString))
         {
             if (this.context.reader.startInventoryTag()) {
                 String stopText = this.context.getString(R.string.title_stop_Inventory);
-                this.toggleButton.setText(stopText);
+                this.scanButton.setText(stopText);
                 isScanning = true;
                 new Scanner().start();
             } else {
@@ -78,7 +79,7 @@ public class MainFragment extends Fragment {
                 this.isScanning = false;
                 if (this.context.reader.stopInventory()) {
                     String startText = this.context.getString(R.string.toggleButton);
-                    this.toggleButton.setText(startText);
+                    this.scanButton.setText(startText);
                 } else {
                     UIHelper.ToastMessage(context, R.string.scan_stop_error);
                 }
@@ -105,9 +106,9 @@ public class MainFragment extends Fragment {
                         strResult = "EPC:" + res.getEPC() + "@" + res.getRssi();
                     }
 
-                    Message msg = handler.obtainMessage();
+                    Message msg = scanHandler.obtainMessage();
                     msg.obj = strResult;
-                    handler.sendMessage(msg);
+                    scanHandler.sendMessage(msg);
                 }
             }
         }
@@ -145,10 +146,19 @@ public class MainFragment extends Fragment {
     }
 
     public class ToggleScanListener implements OnClickListener {
-
         @Override
         public void onClick(View v) {
             toggleScanning();
+        }
+    }
+
+    public class ConnectListener implements OnClickListener {
+        @Override
+        public void onClick(View v) {
+            String url = "https://google.com";
+            Handler handler = new HttpHandler(context, url);
+            Message message = handler.obtainMessage();
+            handler.dispatchMessage(message);
         }
     }
 }
