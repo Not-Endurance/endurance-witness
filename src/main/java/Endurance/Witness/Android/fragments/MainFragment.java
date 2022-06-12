@@ -108,6 +108,7 @@ public class MainFragment extends Fragment {
             Object role = witnessRoles.getSelectedItem();
             Handler handler = new JudgeClient(context, role.toString());
             Message message = handler.obtainMessage();
+            message.obj = "test";
             handler.dispatchMessage(message);
         }
     }
