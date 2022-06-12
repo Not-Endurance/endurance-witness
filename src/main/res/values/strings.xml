@@ -7,7 +7,7 @@
     </string-array>
 
     <string name="witness_role_vet">VET Gate</string>
-    <string name="witness_role_finish">Finnish</string>
+    <string name="witness_role_finish">Finish</string>
     <string name="toggleButton">Start</string>
     <string name="connectButton">Connect</string>
     <string name="title_stop_Inventory">Stop</string>

@@ -2,12 +2,12 @@
 <resources>
 
     <string-array name="witness_roles">
-        <item>VET Gate</item>
-        <item>Finnish</item>
+        <item>@string/witness_role_vet</item>
+        <item>@string/witness_role_finish</item>
     </string-array>
 
-    <string name="toggleButton">Start</string>
-    <string name="connectButton">Connect</string>
+    <string name="witness_role_vet">VET Gate</string>
+    <string name="witness_role_finish">Finish</string>
     <string name="title_stop_Inventory">Stop</string>
     <string name="app_name">demo_uhf</string>
     <string name="close">Close</string>
