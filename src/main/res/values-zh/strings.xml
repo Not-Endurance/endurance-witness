@@ -5,7 +5,7 @@
         <item>VET Gate</item>
         <item>Finnish</item>
     </string-array>
-    <string name="btInventory">Start</string>
+    <string name="toggleButton">Start</string>
     <string name="title_stop_Inventory">Stop</string>
     <string name="app_name">demo_uhf</string>
 

@@ -1,11 +1,11 @@
 package com.example.uhf.fragment;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,26 +21,26 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class UHFReadTagFragment extends Fragment {
-    private boolean loopFlag = false;
+    private boolean isScanning = false;
+    private UHFMainActivity context;
     Handler handler;
-    Button BtInventory;
-    private UHFMainActivity mContext;
+    Button toggleButton;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        Log.i("MY", "UHFReadTagFragment.onCreateView");
-        return inflater
-                .inflate(R.layout.uhf_readtag_fragment, container, false);
+    public View onCreateView(
+        LayoutInflater inflater,
+        ViewGroup container,
+        Bundle savedInstanceState
+    ) {
+        return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        New
-        mContext = (UHFMainActivity) getActivity();
-        BtInventory = getView().findViewById(R.id.BtInventory);
-        BtInventory.setOnClickListener(new ToggleScanListener());
+        this.context = (UHFMainActivity)getActivity();
+        this.toggleButton = getView().findViewById(R.id.ToggleButton);
+        this.toggleButton.setOnClickListener(new ToggleScanListener());
 
         handler = new Handler() {
             @Override
@@ -60,57 +60,53 @@ public class UHFReadTagFragment extends Fragment {
 //        stopInventory();
     }
 
-    private void readTag() {
-        String startString = mContext.getString(R.string.btInventory);
-        if (BtInventory.getText().equals(startString))// 识别标签
+    private void toggleScanning() {
+        String startString = context.getString(R.string.toggleButton);
+        if (this.toggleButton.getText().equals(startString))
         {
-            if (mContext.mReader.startInventoryTag()) {
-                BtInventory.setText(
-                        mContext
-                        .getString(R.string.title_stop_Inventory));
-                loopFlag = true;
-                new TagThread().start();
+            if (this.context.reader.startInventoryTag()) {
+                String stopText = this.context.getString(R.string.title_stop_Inventory);
+                this.toggleButton.setText(stopText);
+                isScanning = true;
+                new Scanner().start();
             } else {
-                mContext.mReader.stopInventory();
-                UIHelper.ToastMessage(mContext,
-                        R.string.scan_start_error);
+                this.context.reader.stopInventory();
+                UIHelper.ToastMessage(context, R.string.scan_start_error);
             }
         } else {
-            stopInventory();
-        }
-    }
-
-    private void stopInventory() {
-        if (loopFlag) {
-            loopFlag = false;
-            if (mContext.mReader.stopInventory()) {
-                BtInventory.setText(mContext.getString(R.string.btInventory));
-            } else {
-                UIHelper.ToastMessage(mContext,
-                        R.string.scan_stop_error);
+            if (this.isScanning) {
+                this.isScanning = false;
+                if (this.context.reader.stopInventory()) {
+                    String startText = this.context.getString(R.string.toggleButton);
+                    this.toggleButton.setText(startText);
+                } else {
+                    UIHelper.ToastMessage(context, R.string.scan_stop_error);
+                }
             }
         }
     }
 
-    class TagThread extends Thread {
+    class Scanner extends Thread {
         public void run() {
             String strTid;
             String strResult;
-            UHFTAGInfo res = null;
-            while (loopFlag) {
-                res = mContext.mReader.readTagFromBuffer();
+            while (isScanning) {
+                UHFTAGInfo res = context.reader.readTagFromBuffer();
                 if (res != null) {
                     strTid = res.getTid();
-                    if (strTid.length() != 0 && !strTid.equals("0000000" +
-                            "000000000") && !strTid.equals("000000000000000000000000")) {
+                    String sixteen = "0000000000000000";
+                    String twentyFour = "000000000000000000000000";
+                    if (strTid.length() != 0
+                        && !strTid.equals(sixteen)
+                        && !strTid.equals(twentyFour)
+                    ) {
                         strResult = "TID:" + strTid + "\n";
                     } else {
-                        strResult = "";
+                        strResult = "EPC:" + res.getEPC() + "@" + res.getRssi();
                     }
-                    Log.i("data","EPC:"+res.getEPC()+"|"+strResult);
-                    Message msg = handler.obtainMessage();
-                    msg.obj = strResult + "EPC:" + res.getEPC() + "@" + res.getRssi();
 
+                    Message msg = handler.obtainMessage();
+                    msg.obj = strResult;
                     handler.sendMessage(msg);
                 }
             }
@@ -124,8 +120,10 @@ public class UHFReadTagFragment extends Fragment {
             String result;
             String type;
             try {
+                // HTTP
                 URL url = new URL("http://google.com");
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
                 int status = con.getResponseCode();
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(con.getInputStream()));
@@ -135,6 +133,7 @@ public class UHFReadTagFragment extends Fragment {
                     content.append(inputLine);
                 }
                 in.close();
+
                 type = "success";
                 result = content.toString();
             } catch (Exception ex) {
@@ -149,7 +148,7 @@ public class UHFReadTagFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            readTag();
+            toggleScanning();
         }
     }
 }

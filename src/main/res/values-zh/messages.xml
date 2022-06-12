@@ -12,4 +12,6 @@
     <string name="cancle">取消</string>
     <string name="app_error">应用程序错误</string>
     <string name="app_error_message">很抱歉，应用程序出现错误，即将退出。\n请提交错误报告，我们会尽快修复这个问题！</string>
+    <string name="scan_start_error">Scan could not start.</string>
+    <string name="scan_stop_error">Scan could not stop.</string>
 </resources>

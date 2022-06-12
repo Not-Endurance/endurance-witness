@@ -9,22 +9,22 @@ public class UHFMainActivity extends BaseTabFragmentActivity {
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initUHF();
-        initViewPager();
+        this.setContentView(R.layout.activity_main);
+        this.initUHF();
+        this.initViewPager();
         this.initViewPageData();
 	}
 
     @Override
 	protected void onDestroy() {
 
-		if (mReader != null) {
-			mReader.free();
+		if (reader != null) {
+			this.reader.free();
 		}
 		super.onDestroy();
 	}
 
     protected void initViewPageData() {
-        fragments.add(new UHFReadTagFragment());
+        this.fragments.add(new UHFReadTagFragment());
     }
 }

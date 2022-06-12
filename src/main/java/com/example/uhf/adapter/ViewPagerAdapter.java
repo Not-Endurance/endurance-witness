@@ -19,7 +19,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        if (fragments.size() > 0) {
+        if (this.fragments.size() > 0) {
             return this.fragments.get(position);
         }
         throw new IllegalStateException("No fragment at position " + position);
@@ -27,13 +27,13 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return fragments.size();
+        return this.fragments.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (lstTitles.size() > 0) {
-            return lstTitles.get(position);
+        if (this.lstTitles.size() > 0) {
+            return this.lstTitles.get(position);
         }
         return null;
     }
