@@ -12,7 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import com.example.uhf.R;
-import com.example.uhf.activity.UHFMainActivity;
+import com.example.uhf.activity.MainActivity;
 import com.example.uhf.tools.UIHelper;
 import com.rscja.deviceapi.entity.UHFTAGInfo;
 import java.io.BufferedReader;
@@ -20,9 +20,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class UHFReadTagFragment extends Fragment {
+public class MainFragment extends Fragment {
     private boolean isScanning = false;
-    private UHFMainActivity context;
+    private MainActivity context;
     Handler handler;
     Button toggleButton;
 
@@ -32,13 +32,13 @@ public class UHFReadTagFragment extends Fragment {
         ViewGroup container,
         Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        return inflater.inflate(R.layout.main_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.context = (UHFMainActivity)getActivity();
+        this.context = (MainActivity)getActivity();
         this.toggleButton = getView().findViewById(R.id.ToggleButton);
         this.toggleButton.setOnClickListener(new ToggleScanListener());
 

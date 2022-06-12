@@ -1,15 +1,15 @@
 package com.example.uhf.activity;
 
 import com.example.uhf.R;
-import com.example.uhf.fragment.UHFReadTagFragment;
+import com.example.uhf.fragment.MainFragment;
 import android.os.Bundle;
 
-public class UHFMainActivity extends BaseTabFragmentActivity {
+public class MainActivity extends FragmentBase {
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_main);
+        this.setContentView(R.layout.main_activity);
         this.initUHF();
         this.initViewPager();
         this.initViewPageData();
@@ -25,6 +25,6 @@ public class UHFMainActivity extends BaseTabFragmentActivity {
 	}
 
     protected void initViewPageData() {
-        this.fragments.add(new UHFReadTagFragment());
+        this.fragments.add(new MainFragment());
     }
 }

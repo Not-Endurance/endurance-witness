@@ -15,10 +15,10 @@ import com.example.uhf.adapter.ViewPagerAdapter;
 import com.example.uhf.widget.NoScrollViewPager;
 import com.rscja.deviceapi.RFIDWithUHFUART;
 
-public class BaseTabFragmentActivity extends FragmentActivity {
+public class FragmentBase extends FragmentActivity {
 
-	protected ActionBar mActionBar;
-	protected NoScrollViewPager mViewPager;
+	protected ActionBar actionBar;
+	protected NoScrollViewPager viewPager;
 	protected ViewPagerAdapter viewPagerAdapter;
 	protected List<Fragment> fragments = new ArrayList<>();
 	protected List<String> lstTitles = new ArrayList<>();
@@ -26,11 +26,11 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 	public RFIDWithUHFUART reader;
 
 	public void initUHF() {
-		this.mActionBar = getActionBar();
-		this.mActionBar.setDisplayShowTitleEnabled(true);
-		this.mActionBar.setDisplayShowHomeEnabled(true);
-		this.mActionBar.setDisplayHomeAsUpEnabled(true);
-		this.mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		this.actionBar = getActionBar();
+		this.actionBar.setDisplayShowTitleEnabled(true);
+		this.actionBar.setDisplayShowHomeEnabled(true);
+		this.actionBar.setDisplayHomeAsUpEnabled(true);
+		this.actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		try {
 			this.reader = RFIDWithUHFUART.getInstance();
 		} catch (Exception ex) {
@@ -51,10 +51,10 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 	protected void initViewPager() {
         FragmentManager fragmentManager = this.getSupportFragmentManager();
         this.viewPagerAdapter = new ViewPagerAdapter(fragmentManager, fragments, lstTitles);
-		this.mViewPager = findViewById(R.id.pager);
-        this.mViewPager.setAdapter(viewPagerAdapter);
+		this.viewPager = findViewById(R.id.pager);
+        this.viewPager.setAdapter(viewPagerAdapter);
 		int offscreenPage = 2;
-		mViewPager.setOffscreenPageLimit(offscreenPage);
+		viewPager.setOffscreenPageLimit(offscreenPage);
 	}
 
 	public void toastMessage(String msg) {
@@ -80,7 +80,7 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 			this.mypDialog.cancel();
 			if (!result) {
 				Toast
-                    .makeText(BaseTabFragmentActivity.this, "init fail", Toast.LENGTH_SHORT)
+                    .makeText(FragmentBase.this, "init fail", Toast.LENGTH_SHORT)
                     .show();
 			}
 		}
@@ -88,7 +88,7 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			this.mypDialog = new ProgressDialog(BaseTabFragmentActivity.this);
+			this.mypDialog = new ProgressDialog(FragmentBase.this);
 			this.mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			this.mypDialog.setMessage("init...");
 			this.mypDialog.setCanceledOnTouchOutside(false);
