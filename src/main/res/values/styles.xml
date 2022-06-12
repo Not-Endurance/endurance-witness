@@ -17,11 +17,7 @@
 
     <style name="CustomTheme" parent="android:style/Theme.Holo.Light">
         <item name="android:actionBarTabTextStyle">@style/MyActionBarTabTextStyle</item>
-        <item name="android:actionBarStyle">@style/MyActionBarStyle</item>
         <item name="android:homeAsUpIndicator">@drawable/actionbar_back</item>
-    </style>
-
-    <style name="MyActionBarStyle" parent="@android:style/Widget.Holo.ActionBar">
     </style>
 
      <style name="MyActionBarTabTextStyle" parent="android:style/Widget.Holo.Light.ActionBar.TabText">
