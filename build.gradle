@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     buildToolsVersion '23.0.1'
     defaultConfig {
-        applicationId "com.example.uhf"
+        applicationId "endurance.witness.android"
         minSdkVersion 11
         targetSdkVersion 28
     }
@@ -22,7 +22,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0'
+        classpath 'com.android.tools.build:gradle:2.2.3'
     }
 }
 
