@@ -3,6 +3,7 @@ package endurance.witness.android.fragments;
 import endurance.witness.android.activities.MainActivity;
 import endurance.witness.android.tools.JudgeClient;
 import endurance.witness.android.tools.UIHelper;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,7 +19,9 @@ import android.widget.Spinner;
 import com.example.Android.R;
 import com.rscja.deviceapi.entity.UHFTAGInfo;
 
-import java.util.Objects;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class MainFragment extends Fragment {
     private boolean isScanning = false;
@@ -95,12 +98,31 @@ public class MainFragment extends Fragment {
     }
 
     class Scanner extends Thread {
+        private HashMap<String, Date> scannedTags = new HashMap<>();
+
+        // TODO: split in methods
         public void run() {
             while (isScanning) {
                 UHFTAGInfo res = context.reader.readTagFromBuffer();
                 if (res != null) {
+                    String tagId = res.getEPC();
+
+                    Date now = new Date();
+                    if (this.scannedTags.containsKey(tagId)) {
+                        Date then = this.scannedTags.get(tagId);
+                        long msDiff = now.getTime() - then.getTime();
+                        long minutesDiff = TimeUnit.MINUTES.convert(msDiff, TimeUnit.MILLISECONDS);
+                        if (minutesDiff < 1) {
+                            continue;
+                        }
+                        this.scannedTags.remove(tagId);
+                        this.scannedTags.put(tagId, now);
+                    } else {
+                        this.scannedTags.put(tagId, now);
+                    }
+
                     Message msg = scanHandler.obtainMessage();
-                    msg.obj = res.getEPC();
+                    msg.obj = tagId;
                     scanHandler.sendMessage(msg);
                 }
             }
