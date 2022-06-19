@@ -44,7 +44,7 @@ class HttpTask extends AsyncTask<String, Void, Integer> {
 
             JSONObject jsonParam = new JSONObject();
             jsonParam.put("id", tagId);
-            jsonParam.put("epochStamp", epochStamp);
+            jsonParam.put("epoch", epochStamp);
             wr.writeBytes(jsonParam.toString());
 
             wr.flush();
