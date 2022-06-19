@@ -7,18 +7,23 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import com.example.Android.R;
 import com.rscja.deviceapi.entity.UHFTAGInfo;
 
+import java.util.Objects;
+
 public class MainFragment extends Fragment {
     private boolean isScanning = false;
     private MainActivity context;
+    EditText judgeIpText;
     Button scanButton;
     Handler scanHandler;
     Button connectButton;
@@ -38,6 +43,7 @@ public class MainFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         this.context = (MainActivity)getActivity();
         View view = getView();
+        this.judgeIpText = view.findViewById(R.id.judgeIpText);
         this.connectButton= view.findViewById(R.id.connectButton);
         this.scanButton = view.findViewById(R.id.scanButton);
         this.witnessRoles = view.findViewById(R.id.witnessRoles);
@@ -56,6 +62,12 @@ public class MainFragment extends Fragment {
 
     private void toggleScanning() {
         String startString = context.getString(R.string.toggleButton);
+        Editable ipAddressEditable = this.judgeIpText.getText();
+        if (ipAddressEditable == null || ipAddressEditable.toString().equals("")) {
+            UIHelper.ToastMessage(context, "Specify IP address");
+            return;
+        }
+        JudgeClient.IpAddress = ipAddressEditable.toString();
         if (this.scanButton.getText().equals(startString))
         {
             Object role = this.witnessRoles.getSelectedItem();

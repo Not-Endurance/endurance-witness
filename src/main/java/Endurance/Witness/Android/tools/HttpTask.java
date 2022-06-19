@@ -38,7 +38,6 @@ class HttpTask extends AsyncTask<String, Void, Integer> {
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("charset", "utf-8");
-            connection.setRequestProperty("Content-Length", "0");
             connection.setUseCaches (false);
 
             DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
