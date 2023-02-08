@@ -124,6 +124,7 @@ public class MainFragment extends Fragment {
                     Message msg = scanHandler.obtainMessage();
                     msg.obj = tagId;
                     scanHandler.sendMessage(msg);
+                    context.playScanSound();
                 }
             }
         }
